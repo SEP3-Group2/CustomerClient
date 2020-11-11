@@ -1,0 +1,60 @@
+﻿@page "/products"
+
+@using CustomerClient.Models;
+@using CustomerClient.Data;
+@inject ICloudService CloudService
+@inject NavigationManager NavigationManager
+
+<h3>View Products</h3>
+
+<button @onclick="ExecuteSearch">Search</button>
+
+@if (productsToShow == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!productsToShow.Any())
+{
+    <p>
+        <em>No items exist. </em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in productsToShow)
+            {
+                <tr>
+                    <td>@product.ID</td>
+                    <td>@product.Title</td>
+                    <td>@product.Category</td>
+                    <td>@product.Description</td>
+                    <td>@product.Price</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IList<Product> productsToShow;
+
+    //filters here
+
+    private async Task ExecuteSearch()
+    {
+        productsToShow = await CloudService.GetAllProductsAsync();
+    }
+}

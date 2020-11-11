@@ -1,0 +1,19 @@
+﻿@page "/test"
+@using CustomerClient.Data;
+@inject ICloudService CloudService
+@inject NavigationManager NavigationManager
+
+<h3>Test</h3>
+
+<button @onclick="GetStringForLabel">Press me :-)</button>
+<p>@labelValue</p>
+
+@code {
+
+    string labelValue = "assmode";
+
+    async Task GetStringForLabel()
+    {
+        labelValue = await CloudService.GetStringAsync();
+    }
+}
