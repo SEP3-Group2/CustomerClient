@@ -35,7 +35,6 @@ namespace CustomerClient.Data
         public async Task<User> ValidateUser(string email, string password)
         {
             string message = await client.GetStringAsync($"{uri}/{email}");
-            Console.WriteLine(message);
 
             User result = JsonSerializer.Deserialize<User>(message);
 
