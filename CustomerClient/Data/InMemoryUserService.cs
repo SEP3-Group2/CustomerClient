@@ -12,24 +12,28 @@ namespace CustomerClient.Data
 
         public InMemoryUserService()
         {
+            
             users = new[] {
                 new User {
                     Password = "123456",
-                    SecurityLevel = 1,
-                    UserName = "Kevin"
+                    Email = "Kevin"
                 },
                 new User {
                     Password = "123456",
-                    SecurityLevel = 1,
-                    UserName = "Anett"
+                    Email = "Anett"
                 }
             }.ToList();
+            
         }
 
-
-        public User ValidateUser(string userName, string password)
+        public Task AddUserAsync(User user)
         {
-            User first = users.FirstOrDefault(user => user.UserName.Equals(userName));
+            throw new NotImplementedException();
+        }
+
+        public async Task<User> ValidateUser(string email, string password)
+        {            
+            User first = users.FirstOrDefault(user => user.Email.Equals(email));
             if (first == null)
             {
                 throw new Exception("User not found");

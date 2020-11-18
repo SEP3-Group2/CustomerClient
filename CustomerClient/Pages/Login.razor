@@ -7,7 +7,7 @@
     <NotAuthorized>
         <div class="form-group">
             <label>User name:</label>
-            <input type="text" placeholder="user name" @bind-value="username" />
+            <input type="text" placeholder="user name" @bind-value="Email" />
         </div>
         <div class="form-group">
             <label>Password</label>
@@ -27,7 +27,7 @@
 </AuthorizeView>
 
 @code {
-    private string username;
+    private string Email;
     private string password;
     private string errorMessage;
 
@@ -36,8 +36,8 @@
         errorMessage = "";
         try
         {
-            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(username, password);
-            username = "";
+            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(Email, password);
+            Email = "";
             password = "";
         }
         catch (Exception e)
@@ -49,7 +49,7 @@
     public async Task PerformLogout()
     {
         errorMessage = "";
-        username = "";
+        Email = "";
         password = "";
         try
         {
