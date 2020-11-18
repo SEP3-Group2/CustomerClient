@@ -34,7 +34,6 @@ namespace CustomerClient
             services.AddSingleton<ICloudService, CloudService>();
             services.AddScoped<IUserService, InMemoryUserService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("SecurityLevel1", a =>
