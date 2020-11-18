@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CustomerClient.Data;
+using Microsoft.AspNetCore.Components.Authorization;
+using CustomerClient.Authentication;
 
 namespace CustomerClient
 {
@@ -30,7 +32,13 @@ namespace CustomerClient
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<ICloudService, CloudService>();
-            services.AddSingleton<IUserService, CloudUserService>();
+            services.AddScoped<IUserService, InMemoryUserService>();
+            services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("SecurityLevel1", a =>
+                    a.RequireAuthenticatedUser().RequireClaim("Level", "1"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
