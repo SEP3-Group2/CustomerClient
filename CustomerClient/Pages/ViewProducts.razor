@@ -6,55 +6,95 @@
 @inject NavigationManager NavigationManager
 
 <h3>View Products</h3>
+<form>
+    <label for="id">ID</label><br>
+    <input type="text" id="id" @bind-value="ID"><br>
+    <label for="title">Title</label><br>
+    <input type="text" id="title" @bind-value="Title"><br>
+    <label for="category">Category</label><br>
+    <input type="text" id="category" @bind-value="Category"><br>
+    <label for="price">Price</label><br>
+    <input type="text" id="price" @bind-value="Price">
+</form>
 
-<button @onclick="ExecuteSearch">Search</button>
+    <button @onclick="ExecuteSearch">Search</button>
 
-@if (productsToShow == null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
-}
-else if (!productsToShow.Any())
-{
-    <p>
-        <em>No items exist. </em>
-    </p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in productsToShow)
-            {
-                <tr>
-                    <td>@product.ID</td>
-                    <td>@product.Title</td>
-                    <td>@product.Category</td>
-                    <td>@product.Description</td>
-                    <td>@product.Price</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-@code {
-    private IList<Product> productsToShow;
-
-    //filters here
-
-    private async Task ExecuteSearch()
+    @if (productsToShow == null)
     {
-        productsToShow = await CloudService.GetAllProductsAsync();
+        <p>
+            <em>Loading...</em>
+        </p>
     }
-}
+    else if (!productsToShow.Any())
+    {
+        <p>
+            <em>No items exist. </em>
+        </p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in productsToShow)
+                {
+                    <tr>
+                        <td>@product.ID</td>
+                        <td>@product.Title</td>
+                        <td>@product.Category</td>
+                        <td>@product.Description</td>
+                        <td>@product.Price</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @code {
+        private IList<Product> productsToShow;
+        public int ID;
+        public string Title;
+        public string Category;
+        public string Description;
+        public double Price;
+
+        //filters here
+
+        private async Task ExecuteSearch()
+        {
+            IEnumerable<Product> query = await CloudService.GetAllProductsAsync();
+
+            if (!String.IsNullOrEmpty(ID.ToString()))
+            {
+                query = query.Where(x => x.ID == ID).ToList();
+            }
+            if (!String.IsNullOrEmpty(Title))
+            {
+                query = query.Where(x => x.Title == Title).ToList();
+            }
+            if (!String.IsNullOrEmpty(Category))
+            {
+                query = query.Where(x => x.Category == Category).ToList();
+            }
+            if (!String.IsNullOrEmpty(Description))
+            {
+                query = query.Where(x => x.Description == Description).ToList();
+            }
+            if (!String.IsNullOrEmpty(Price.ToString()))
+            {
+                query = query.Where(x => x.Price == Price).ToList();
+            }
+
+            productsToShow = query.ToList();
+
+
+        }
+    }
