@@ -30,7 +30,7 @@ namespace CustomerClient
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<ICloudService, CloudService>();
+            services.AddSingleton<IProductService, ProductService>();
             services.AddScoped<IUserService, CloudUserService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddAuthorization(options =>

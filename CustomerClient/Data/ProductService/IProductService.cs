@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CustomerClient.Data
 {
-    interface ICloudService
+    interface IProductService
     {
-        Task<string> GetStringAsync();
         Task<List<Product>> GetAllProductsAsync();
     }
 }

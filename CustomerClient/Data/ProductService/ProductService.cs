@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace CustomerClient.Data
 {
-    public class CloudService : ICloudService
+    public class ProductService : IProductService
     {
         HttpClient client;
 
-        public CloudService()
+        public ProductService()
         {
             client = new HttpClient();
         }
@@ -24,15 +24,6 @@ namespace CustomerClient.Data
             List<Product> returnList = JsonSerializer.Deserialize<List<Product>>(message);
 
             return returnList;
-        }
-
-        public async Task<string> GetStringAsync()
-        {
-            string message = await client.GetStringAsync("http://localhost:8080/helloNEW");
-
-            Hello returnMessage = JsonSerializer.Deserialize<Hello>(message);
-
-            return returnMessage.Content;
         }
     }
 }
