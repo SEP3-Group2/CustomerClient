@@ -2,7 +2,7 @@
 
 @using CustomerClient.Models;
 @using CustomerClient.Data;
-@inject ICloudService CloudService
+@inject IProductService ProductService
 @inject NavigationManager NavigationManager
 
 <h3>View Products</h3>
@@ -70,7 +70,7 @@
 
         private async Task ExecuteSearch()
         {
-            IEnumerable<Product> query = await CloudService.GetAllProductsAsync();
+            IEnumerable<Product> query = await ProductService.GetAllProductsAsync();
 
             if (!String.IsNullOrEmpty(ID.ToString()))
             {
