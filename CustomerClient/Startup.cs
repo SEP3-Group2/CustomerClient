@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using CustomerClient.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using CustomerClient.Authentication;
+using Syncfusion.Blazor;
 
 namespace CustomerClient
 {
@@ -38,6 +39,7 @@ namespace CustomerClient
                 options.AddPolicy("SecurityLevel1", a =>
                     a.RequireAuthenticatedUser().RequireClaim("Level", "1"));
             });
+            services.AddSyncfusionBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
