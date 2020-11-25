@@ -4,97 +4,99 @@
 @using CustomerClient.Data;
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
+@using System.Collections
+@using Syncfusion.Blazor.Inputs
+
+
 
 <h3>View Products</h3>
 <form>
-    <label for="id">ID</label><br>
-    <input type="text" id="id" @bind-value="ID"><br>
-    <label for="title">Title</label><br>
+    <label>Title</label><br>
     <input type="text" id="title" @bind-value="Title"><br>
-    <label for="category">Category</label><br>
-    <input type="text" id="category" @bind-value="Category"><br>
-    <label for="price">Price</label><br>
-    <input type="text" id="price" @bind-value="Price">
+    <label>Category</label><br>
+                           <select @bind="Category" class="form-control" style="width:200px">
+                               <option disabled hidden>Select Category...</option>
+                               <option>All</option>
+                               <option>Console </option>
+                               <option>Game </option>
+                               <option>PC Component</option>
+                               <option>Laptop </option>
+                               <option>TV </option>
+                               <option>Media Player</option>
+                               <option>Movie </option>
+                               <option>Speaker </option>
+                               <option>Kitchen Appliance </option>
+                               <option>Iron </option>
+                               <option>Camera </option>
+                               <option>Phone </option>
+                               <option>Smart watch</option>
+                               <option>Headphones </option>
+                               <option>Electric scooter</option>
+                               <option>Air Condtion</option>
+                               <option>Drones </option>
+                           </select>
+    <label>Price</label><br>
+    <SfSlider Min="0" Max="10000" @bind-Value="Price" Step="500" Width="300">
+        <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Format="N0" Placement="TooltipPlacement.Before"></SliderTooltipData>
+        <SliderTicksData Placement="Placement.After" Format="N0" ShowSmallTicks="false" LargeStep="2500"></SliderTicksData>
+    </SfSlider>
 </form>
 
-    <button @onclick="ExecuteSearch">Search</button>
+<button @onclick="ExecuteSearch">Search</button>
 
-    @if (productsToShow == null)
-    {
-        <p>
-            <em>Loading...</em>
-        </p>
-    }
-    else if (!productsToShow.Any())
-    {
-        <p>
-            <em>No items exist. </em>
-        </p>
-    }
-    else
-    {
-        <table class="table">
-            <thead>
+@if (productsToShow == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!productsToShow.Any())
+{
+    <p>
+        <em>No items exist. </em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in productsToShow)
+            {
                 <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Price</th>
+                    <td>@product.ID</td>
+                    <td>@product.Title</td>
+                    <td>@product.Category</td>
+                    <td>@product.Description</td>
+                    <td>@product.Price</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var product in productsToShow)
-                {
-                    <tr>
-                        <td>@product.ID</td>
-                        <td>@product.Title</td>
-                        <td>@product.Category</td>
-                        <td>@product.Description</td>
-                        <td>@product.Price</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IList<Product> productsToShow;
+    public int ID;
+    public string Title;
+    public string Category = "All";
+    public string Description;
+    public string Price = "20000";
+
+
+    //filters here
+    private async Task ExecuteSearch()
+    {
+        productsToShow = await ProductService.GetTitleCategoryPriceFilteredProductsAsync(Title, Category, Price);
+        Title = null;
+        Category = "All";
     }
-
-    @code {
-        private IList<Product> productsToShow;
-        public int ID;
-        public string Title;
-        public string Category;
-        public string Description;
-        public double Price;
-
-        //filters here
-
-        private async Task ExecuteSearch()
-        {
-            IEnumerable<Product> query = await ProductService.GetAllProductsAsync();
-
-            if (!String.IsNullOrEmpty(ID.ToString()))
-            {
-                query = query.Where(x => x.ID == ID).ToList();
-            }
-            if (!String.IsNullOrEmpty(Title))
-            {
-                query = query.Where(x => x.Title == Title).ToList();
-            }
-            if (!String.IsNullOrEmpty(Category))
-            {
-                query = query.Where(x => x.Category == Category).ToList();
-            }
-            if (!String.IsNullOrEmpty(Description))
-            {
-                query = query.Where(x => x.Description == Description).ToList();
-            }
-            if (!String.IsNullOrEmpty(Price.ToString()))
-            {
-                query = query.Where(x => x.Price == Price).ToList();
-            }
-
-            productsToShow = query.ToList();
-
-
-        }
-    }
+}

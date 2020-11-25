@@ -9,5 +9,6 @@ namespace CustomerClient.Data
     interface IProductService
     {
         Task<List<Product>> GetAllProductsAsync();
+        Task<IList<Product>> GetTitleCategoryPriceFilteredProductsAsync(string title, string category,string price);
     }
 }

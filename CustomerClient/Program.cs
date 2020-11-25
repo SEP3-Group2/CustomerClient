@@ -16,6 +16,7 @@ namespace CustomerClient
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+           
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -23,6 +24,7 @@ namespace CustomerClient
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                     
                 });
     }
 }
