@@ -14,27 +14,27 @@
     <label>Title</label><br>
     <input type="text" id="title" @bind-value="Title"><br>
     <label>Category</label><br>
-                           <select @bind="Category" class="form-control" style="width:200px">
-                               <option disabled hidden>Select Category...</option>
-                               <option>All</option>
-                               <option>Console </option>
-                               <option>Game </option>
-                               <option>PC Component</option>
-                               <option>Laptop </option>
-                               <option>TV </option>
-                               <option>Media Player</option>
-                               <option>Movie </option>
-                               <option>Speaker </option>
-                               <option>Kitchen Appliance </option>
-                               <option>Iron </option>
-                               <option>Camera </option>
-                               <option>Phone </option>
-                               <option>Smart watch</option>
-                               <option>Headphones </option>
-                               <option>Electric scooter</option>
-                               <option>Air Condtion</option>
-                               <option>Drones </option>
-                           </select>
+    <select @bind="Category" class="form-control" style="width:200px">
+        <option disabled hidden>Select Category...</option>
+        <option>All</option>
+        <option>Console </option>
+        <option>Game </option>
+        <option>PC Component</option>
+        <option>Laptop </option>
+        <option>TV </option>
+        <option>Media Player</option>
+        <option>Movie </option>
+        <option>Speaker </option>
+        <option>Kitchen Appliance </option>
+        <option>Iron </option>
+        <option>Camera </option>
+        <option>Phone </option>
+        <option>Smart watch</option>
+        <option>Headphones </option>
+        <option>Electric scooter</option>
+        <option>Air Condtion</option>
+        <option>Drones </option>
+    </select>
     <label>Price</label><br>
     <SfSlider Min="0" Max="10000" @bind-Value="Price" Step="500" Width="300">
         <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Format="N0" Placement="TooltipPlacement.Before"></SliderTooltipData>
@@ -56,6 +56,7 @@ else if (!productsToShow.Any())
         <em>No items exist. </em>
     </p>
 }
+
 else
 {
     <table class="table">
@@ -71,7 +72,7 @@ else
         <tbody>
             @foreach (var product in productsToShow)
             {
-                <tr>
+                <tr @onclick="()=> TrClickedAtIndex(product.ID)">
                     <td>@product.ID</td>
                     <td>@product.Title</td>
                     <td>@product.Category</td>
@@ -83,6 +84,12 @@ else
     </table>
 }
 
+
+
+
+
+
+
 @code {
     private IList<Product> productsToShow;
     public int ID;
@@ -91,6 +98,8 @@ else
     public string Description;
     public string Price = "20000";
 
+    private Product productToShow = new Product();
+   
 
     //filters here
     private async Task ExecuteSearch()
@@ -98,5 +107,11 @@ else
         productsToShow = await ProductService.GetTitleCategoryPriceFilteredProductsAsync(Title, Category, Price);
         Title = null;
         Category = "All";
+    }
+
+    public async Task TrClickedAtIndex(int id)
+    {
+        ProductService.setProductId(id);
+        NavigationManager.NavigateTo("/ProductView");
     }
 }

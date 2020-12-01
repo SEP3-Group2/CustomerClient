@@ -1,44 +1,31 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">CustomerClient</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a href="#" class="navbar-brand"><b>SELLECTRIC</b></a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
-</div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="products">
-                <span class="oi oi-account-login" aria-hidden="true"></span> Products
-            </NavLink>
-        </li>
-        <AuthorizeView Policy="SecurityLevel1">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="profile">
-                <span class="oi oi-document" aria-hidden="true"></span> Profile
-            </NavLink>
-        </li>
-        </AuthorizeView>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="register">
-                <span class="oi oi-account-login" aria-hidden="true"></span> Register
-            </NavLink>
-        </li>
-    </ul>
-</div>
+    <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+        <div class="navbar-nav">
+            <a href="/" class="nav-item nav-link">Home</a>
+            <a href="products" class="nav-item nav-link">Products</a>
+
+            
+
+            <a href="profile" class="nav-item nav-link">Profile</a>
+            <a href="register" class="nav-item nav-link">Sign up</a>
+        </div>
+
+        <div class="navbar-nav ml-auto action-buttons">
+            <div class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle mr-4">Login</a>
+                <div class="dropdown-menu action-form">
+                   <LoginComponent.Login/>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+   
 }

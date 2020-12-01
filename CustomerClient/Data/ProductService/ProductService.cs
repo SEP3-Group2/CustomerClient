@@ -12,6 +12,7 @@ namespace CustomerClient.Data
     {
         HttpClient client;
         private string uri = "http://localhost:8080/products";
+        private int productId = 0;
 
         public ProductService()
         {
@@ -22,9 +23,17 @@ namespace CustomerClient.Data
         {
             string message = await client.GetStringAsync(uri);
             List<Product> returnList = JsonSerializer.Deserialize<List<Product>>(message);
-
             return returnList;
         }
+
+        public async Task<Product> GetProductByIdAsync(int id)
+        {
+            string message = await client.GetStringAsync(uri + "/" + id);
+            Product result = JsonSerializer.Deserialize<Product>(message);
+            return result;
+        }
+
+       
 
         public async Task<IList<Product>> GetTitleCategoryPriceFilteredProductsAsync(string title, string category, string price)
         {
@@ -55,6 +64,15 @@ namespace CustomerClient.Data
             }
             List<Product> result = JsonSerializer.Deserialize<List<Product>>(message);
             return result;
+        }
+
+        public void setProductId(int id)
+        {
+            productId = id;
+        }
+        public int getProductId()
+        {
+            return productId;
         }
     }
 }

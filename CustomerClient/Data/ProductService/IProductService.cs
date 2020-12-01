@@ -10,5 +10,8 @@ namespace CustomerClient.Data
     {
         Task<List<Product>> GetAllProductsAsync();
         Task<IList<Product>> GetTitleCategoryPriceFilteredProductsAsync(string title, string category,string price);
+        Task<Product> GetProductByIdAsync(int id);
+        void setProductId(int id);
+        int getProductId();
     }
 }

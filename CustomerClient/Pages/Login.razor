@@ -5,24 +5,44 @@
 @inject NavigationManager NavigationManager
 <AuthorizeView>
     <NotAuthorized>
-        <div class="form-group">
-            <label>User name:</label>
-            <input type="text" placeholder="user name" @bind-value="Email" />
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" placeholder="password" @bind-value="password" />
-        </div>
-        <div style="color:red">@errorMessage</div>
+      
 
-        <a href="" @onclick="PerformLogin">
-            Login
-        </a>
+        <div class="container">
+            <div class="row">
+                <div class=" mx-auto">
+                  
+                            <h5 class="card-title text-center">Login</h5>
+                            <form class="form-login">
+                                <div class="form-label-group">
+                                    <label class="oi oi-person">  Email</label>
+                                    <input type="email" class="form-control" placeholder="Email" @bind-value="Email" required>
+                                </div>
+                                <div class="form-label-group">
+                                    <label class="oi oi-lock-locked"> Password</label>
+                                    <input type="password" class="form-control" placeholder="Password" @bind-value="password" required>
+                                </div>
+
+                            </form>
+                            <div class="form-label-group">
+                                <button class="btn btn-outline-success btn-block text-uppercase" type="submit" @onclick="PerformLogin">Login</button>
+                                <p class="text-center">Don't have an account? <a class="btn btn-primary" href="Register">Sign up</a> </p>
+                            </div>
+
+                </div>
+
+            </div>
+        </div>
     </NotAuthorized>
     <Authorized>
-        <a href="" @onclick="PerformLogout">
-            Log out
-        </a>
+        <div class="container">
+            <div class="row">
+                <div class=" mx-auto">
+                            <button class="btn btn-outline-danger btn-block" href="" @onclick="PerformLogout">
+                                Log out
+                            </button>
+                </div>
+            </div>
+        </div>
     </Authorized>
 </AuthorizeView>
 
