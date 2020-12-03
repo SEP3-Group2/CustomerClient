@@ -13,7 +13,7 @@ using CustomerClient.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using CustomerClient.Authentication;
 using Syncfusion.Blazor;
-
+using CustomerClient.Data.ImagesService;
 namespace CustomerClient
 {
     public class Startup
@@ -34,6 +34,7 @@ namespace CustomerClient
             services.AddSingleton<IProductService, ProductService>();
             services.AddScoped<IUserService, CloudUserService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            services.AddSingleton<IImagesService, ImagesService>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("SecurityLevel1", a =>
