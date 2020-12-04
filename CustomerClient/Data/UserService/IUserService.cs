@@ -10,5 +10,9 @@ namespace CustomerClient.Data
     {
         Task<User> ValidateUser(string Email, string password);
         Task AddUserAsync(User user);
+
+        void setBool(bool comingFromDelivery);
+        bool getBool();
+        
     }
 }

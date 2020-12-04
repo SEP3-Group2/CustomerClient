@@ -9,7 +9,7 @@
     <div class="col-md-9 mx-auto">
         <div class="card card-register">
             <div class="card-body">
-               
+
                 <div class="col-md-6">
                     <div class="product-image">
                         <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
@@ -47,11 +47,19 @@
                     </div>
                     <div> <strong>Price : </strong> <span> @productToShow.Price DKK</span></div>
                     <div class="form-group">
-                        <label><strong>Quantity </strong></label>
-                        <input placeholder="0" class="form-control quantity">
+                        <label><strong>Quantity (Max 5): </strong></label>
+                        <input class="form-control quantity" type="number" @bind="quantity" style="width:65px" />
+                        @if (quantity > 5)
+                        {
+                            quantity = 5;
+                        }
+                        @if (quantity < 1)
+                        {
+                            quantity = 0;
+                        }
                     </div>
                     <p>
-                        <button class="btn btn-primary" type="button"><i class="material-icons">add_shopping_cart</i> Add to Cart</button>
+                        <button class="btn btn-primary" type="button" @onclick="addToCart"><i class="material-icons">add_shopping_cart</i> Add to Cart</button>
                     </p>
                 </div>
 
@@ -62,9 +70,35 @@
 
 @code {
     private Product productToShow = new Product();
+    private ProductQuantity productToCart = new ProductQuantity();
+    private int quantity = 0;
+
     protected override async Task OnInitializedAsync()
     {
         productToShow = await ProductService.GetProductByIdAsync(ProductService.getProductId());
+
     }
+
+    private void addToCart()
+    {
+        productToCart.Title = productToShow.Title;
+        productToCart.Category = productToShow.Category;
+        productToCart.ID = productToShow.ID;
+        productToCart.Description = productToShow.Description;
+        productToCart.Price = productToShow.Price;
+        productToCart.Quantity = quantity;
+
+        if (ProductService.getTitles().Contains(productToShow.Title))
+        {
+            ProductService.getProductsFromCart().First(pr => pr.ID == productToCart.ID).Quantity += quantity;
+        }
+        if (quantity > 0 && quantity < 6)
+        {
+            ProductService.addProductToCart(productToCart, quantity);
+        }
+
+
+    }
+
 
 }
