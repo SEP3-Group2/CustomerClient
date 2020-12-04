@@ -99,7 +99,11 @@ else
     public string Price = "20000";
 
     private Product productToShow = new Product();
-   
+
+    protected override async Task OnInitializedAsync()
+    {
+        productsToShow = await ProductService.GetTitleCategoryPriceFilteredProductsAsync(Title, Category, Price);
+    }
 
     //filters here
     private async Task ExecuteSearch()

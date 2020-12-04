@@ -13,5 +13,10 @@ namespace CustomerClient.Data
         Task<Product> GetProductByIdAsync(int id);
         void setProductId(int id);
         int getProductId();
+        void addProductToCart(ProductQuantity product, int quantity);
+        List<ProductQuantity> getProductsFromCart();
+        void RemoveProductFromCart(ProductQuantity product);
+        List<string> getTitles();
+        void RemoveTitle(ProductQuantity product);
     }
 }

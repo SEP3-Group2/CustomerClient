@@ -1,0 +1,316 @@
+﻿@page  "/cart"
+@using CustomerClient.Models;
+@using CustomerClient.Data;
+@inject IUserService CloudUserService
+@inject IProductService ProductService
+@inject IWarehouseService WarehouseService
+@inject ITransactionService TransactionService
+@inject ITransactionProductService TransactionProductService
+@inject NavigationManager NavigationManager
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+
+@if (cartHidden == false)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Remove from Cart</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products.ToList())
+            {
+                <tr>
+                    <td>@product.Title</td>
+                    <td>@product.Category</td>
+                    <td>@product.Price</td>
+                    <td>
+                        <input type="number" @bind=@product.Quantity style="width:55px" />
+                    </td>
+                    <td>
+                        <button @onclick="@(() => RemoveFromCart(product))">
+                            <i class="oi oi-trash" style="color:red" />
+                        </button>
+                    </td>
+                </tr>
+                @if (@product.Quantity > 5)
+                {
+                    product.Quantity = 5;
+                }
+                @if (@product.Quantity == @product.Quantity)
+                {
+                    UpdateTotalPrice();
+                }
+                @if (@product.Quantity < 1)
+                {
+                    RemoveFromCart(product);
+                }
+            }
+        </tbody>
+    </table>
+
+    <p>
+        Total price: <span>@totalPrice</span>
+    </p>
+
+    <p>
+        <button class="btn btn-success" @onclick="DeliveryForm"><i class="material-icons">add_shopping_cart</i> Order items</button>
+    </p>
+}
+
+@if (orderHidden == false)
+{
+    <table class="col-md-4 mx-auto">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products.ToList())
+            {
+                <tr>
+                    <td>@product.Title</td>
+                    <td>@product.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p class="col-md-2 mx-auto">
+        Total price: <span>@totalPrice</span>
+    </p>
+
+    <EditForm Model="@newTransaction" OnValidSubmit="@CreateTransaction">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-md-9 mx-auto">
+                    <div class="card card-register">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Customer Information</h5>
+                            <form class="form-register">
+
+                                <div class="form-label-group">
+
+                                    <label><i class="material-icons"> email </i> Email: </label>
+                                    <InputText class="form-control" @bind-Value="newTransaction.Email" placeholder="Email" />
+
+                                    <label><i class="material-icons"> account_box </i> Name:</label>
+                                    <InputText class="form-control" @bind-Value="newTransaction.CustomerName" placeholder="Name" />
+
+                                    <label><i class="material-icons"> home </i> Address:</label>
+                                    <InputText class="form-control" @bind-Value="newTransaction.Address" placeholder="Address" />
+
+                                    <label><i class="material-icons"> perm_phone_msg </i> Phone Number:</label>
+                                    <InputText class="form-control" @bind-Value="newTransaction.Phone" placeholder="Phone Number" />
+                                </div>
+                            </form>
+
+                            <button class="btn btn-outline-success btn-block text-uppercase" type="submit" style="margin-left: .5rem;">Deliver Items</button>
+                            <button class="btn btn-outline-success btn-block text-uppercase" @onclick="goToLogin" style="margin-left: .5rem;">Login</button>
+                            <button class="btn btn-outline-primary btn-block text-uppercase" @onclick="backToCart" style="margin-left: .5rem;">Back</button>
+                        </div>
+                    </div>
+
+                    <footer>
+                        <div class="footer-copyright text-center py-3">
+                            © 2020 Copyright SEP3-Group2
+                        </div>
+
+                    </footer>
+
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
+
+
+
+@code {
+    double totalPrice = 0;
+    List<ProductQuantity> products = new List<ProductQuantity>();
+
+    List<int> productIds = new List<int>();
+    List<CartProduct> productsInCart = new List<CartProduct>();
+    int storeIdDeliver = 0;
+
+    Transaction newTransaction = new Transaction();
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private bool cartHidden = false;
+    private bool orderHidden = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        products = ProductService.getProductsFromCart();
+
+        foreach (var product in ProductService.getProductsFromCart())
+        {
+            totalPrice += product.Price * product.Quantity;
+            if (product.Quantity > 5)
+            {
+                product.Quantity = 5;
+            }
+        }
+    }
+
+    private void UpdateTotalPrice()
+    {
+        totalPrice = 0;
+        foreach (var product in ProductService.getProductsFromCart())
+        {
+            totalPrice += product.Price * product.Quantity;
+        }
+    }
+
+    private void RemoveFromCart(ProductQuantity productRemove)
+    {
+        ProductService.RemoveTitle(productRemove);
+        ProductService.RemoveProductFromCart(productRemove);
+        UpdateTotalPrice();
+    }
+
+    public async Task getEnoughProducts()
+    {
+        foreach (var product in products)
+        {
+            productIds.Add(product.ID);
+            productsInCart.AddRange(await WarehouseService.GetWarehouseProductFromStore(product.ID, product.Quantity));
+        }
+    }
+
+    public void backToCart()
+    {
+        NavigationManager.NavigateTo("/login");
+        NavigationManager.NavigateTo("/cart");
+    }
+
+    public async Task<bool> checkStockAvailabilty()
+    {
+        await getEnoughProducts();
+
+        List<CartProduct> productsInStore1 = new List<CartProduct>();
+        List<CartProduct> productsInStore2 = new List<CartProduct>();
+        List<CartProduct> productsInStore3 = new List<CartProduct>();
+
+
+
+        foreach (var product in productsInCart)
+        {
+            if (product.StoreId == 1)
+            {
+                productsInStore1.Add(product);
+            }
+            if (product.StoreId == 2)
+            {
+                productsInStore2.Add(product);
+            }
+            if (product.StoreId == 3)
+            {
+                productsInStore3.Add(product);
+            }
+        }
+
+        if (productsInStore1.Count == productIds.Count)
+        {
+            storeIdDeliver = 1;
+            return true;
+        }
+        if (productsInStore2.Count == productIds.Count)
+        {
+            storeIdDeliver = 2;
+            return true;
+        }
+        if (productsInStore3.Count == productIds.Count)
+        {
+            storeIdDeliver = 3;
+            return true;
+        }
+
+        return false;
+    }
+
+    public void goToLogin()
+    {
+        CloudUserService.setBool(true);
+        NavigationManager.NavigateTo("/login");
+    }
+
+    private async Task DeliveryForm()
+    {
+        if (await checkStockAvailabilty() == true)
+        {
+            var user = (await authenticationStateTask).User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                newTransaction.CustomerName = user.FindFirst(c => c.Type == ClaimTypes.Name)?.Value.ToString();
+                newTransaction.Address = user.FindFirst(c => c.Type == ClaimTypes.StreetAddress)?.Value.ToString();
+                newTransaction.Phone = user.FindFirst(c => c.Type == ClaimTypes.MobilePhone)?.Value.ToString();
+                newTransaction.Email = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value.ToString();
+            }
+            cartHidden = true;
+            orderHidden = false;
+        }
+        else
+        {
+            //Error message
+        }
+    }
+
+    private async Task CreateTransaction()
+    {
+        if (products.Count == 0)
+        {
+            //Empty cart
+            Console.WriteLine("Cart is empty");
+        }
+        else
+        {
+            newTransaction.StoreId = storeIdDeliver;
+            DateTime today = DateTime.Today;
+            string todayAsString = today.ToString("dd/MM/yyyy");
+            newTransaction.Date = Convert.ToDateTime(todayAsString);
+            newTransaction.TotalPrice = totalPrice;
+            newTransaction.DeliveryMethod = "Delivered";
+            await TransactionService.AddTransactionAsync(newTransaction);
+
+            int lastTransactionid = await TransactionService.GetLastTransactiontID();
+
+            foreach (var product in products)
+            {
+                TransactionProduct newOne = new TransactionProduct();
+                newOne.ProductId = product.ID;
+                newOne.Quantity = product.Quantity;
+                newOne.TransactionId = lastTransactionid;
+                await TransactionProductService.AddTransactionProductAsync(newOne);
+            }
+
+            SuccessDeliver();
+        }
+    }
+
+    public void SuccessDeliver()
+    {
+        NavigationManager.NavigateTo("/profile");
+        foreach (var product in products.ToList())
+        {
+            RemoveFromCart(product);
+        }
+    }
+
+}
