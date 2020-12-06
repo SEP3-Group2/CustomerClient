@@ -1,32 +1,36 @@
 ﻿@page "/login"
 @namespace LoginComponent
 @using CustomerClient.Authentication
+@using CustomerClient.Data;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject IUserService UserService
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 <AuthorizeView>
     <NotAuthorized>
-      
+
 
         <div class="container">
             <div class="row">
                 <div class=" mx-auto">
-                  
-                            <h5 class="card-title text-center">Login</h5>
-                            <form class="form-login">
-                                <div class="form-label-group">
-                                    <label class="oi oi-person">  Email</label>
-                                    <input type="email" class="form-control" placeholder="Email" @bind-value="Email" required>
-                                </div>
-                                <div class="form-label-group">
-                                    <label class="oi oi-lock-locked"> Password</label>
-                                    <input type="password" class="form-control" placeholder="Password" @bind-value="password" required>
-                                </div>
 
-                            </form>
-                            <div class="form-label-group">
-                                <button class="btn btn-outline-success btn-block text-uppercase" type="submit" @onclick="PerformLogin">Login</button>
-                                <p class="text-center">Don't have an account? <a class="btn btn-primary" href="Register">Sign up</a> </p>
-                            </div>
+                    <h5 class="card-title text-center">Login</h5>
+                    <form class="form-login">
+                        <div class="form-label-group">
+                            <label class="oi oi-person">  Email</label>
+                            <input type="email" class="form-control" placeholder="Email" @bind-value="Email" required>
+                        </div>
+                        <div class="form-label-group">
+                            <label class="oi oi-lock-locked"> Password</label>
+                            <input type="password" class="form-control" placeholder="Password" @bind-value="password" required>
+                        </div>
+
+                    </form>
+                    <div class="form-label-group">
+                        <button class="btn btn-outline-success btn-block text-uppercase" type="submit" @onclick="PerformLogin">Login</button>
+                        <p class="text-center">Don't have an account? <a class="btn btn-primary" href="Register">Sign up</a> </p>
+                    </div>
 
                 </div>
 
@@ -37,9 +41,9 @@
         <div class="container">
             <div class="row">
                 <div class=" mx-auto">
-                            <button class="btn btn-outline-danger btn-block" href="" @onclick="PerformLogout">
-                                Log out
-                            </button>
+                    <button class="btn btn-outline-danger btn-block" href="" @onclick="PerformLogout">
+                        Log out
+                    </button>
                 </div>
             </div>
         </div>
@@ -50,13 +54,16 @@
     private string Email;
     private string password;
     private string errorMessage;
-
+    [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
     public async Task PerformLogin()
     {
         errorMessage = "";
         try
         {
-            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(Email, password);
+           await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(Email, password);
+            var userPrincipal = (await AuthStat).User;
+
+            UserService.setUserId(int.Parse(userPrincipal.FindFirst(c => c.Type == ClaimTypes.SerialNumber)?.Value));
             Email = "";
             password = "";
         }

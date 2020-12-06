@@ -11,6 +11,8 @@ namespace CustomerClient.Data
 {
     public class CloudUserService : IUserService
     {
+        private int userId;
+
         HttpClient client;
         string uri = "http://localhost:8080/customerUsers"; 
 
@@ -32,6 +34,7 @@ namespace CustomerClient.Data
             await client.PostAsync($"{uri}", content);
         }
 
+
         public async Task<User> ValidateUser(string email, string password)
         {
             string message = await client.GetStringAsync($"{uri}/{email}");
@@ -49,6 +52,36 @@ namespace CustomerClient.Data
             }
 
             return result;
+        }
+
+        public async Task<User> getUserByIdAsync(int id)
+        {
+            string message = await client.GetStringAsync($"{uri}/users/{id}");
+            User result = JsonSerializer.Deserialize<User>(message);
+            return result;
+        }
+        public async Task<User> UpadteUserAsync(User user)
+        {
+            string userSerialized = JsonSerializer.Serialize(user);
+            HttpContent content = new StringContent(
+                userSerialized,
+                Encoding.UTF8,
+                "application/json"
+                );
+
+            await client.PatchAsync(uri, content);
+            var getUser = await getUserByIdAsync(user.UserID);
+            return getUser;
+        }
+
+        public void setUserId(int id)
+        {
+            userId = id;
+        }
+
+        public int getUserId()
+        {
+            return userId;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CustomerClient.Data
 {
-    public class InMemoryUserService:IUserService
+    public class InMemoryUserService
     {
         private List<User> users;
 

@@ -87,7 +87,7 @@ body {
     }
 }
 
-
+/*Form*/
 .container {
     border-radius: 5px;
     padding: 20px;
@@ -137,10 +137,9 @@ card-register, card-login {
     font-weight: bold;
     transition: all 0.5s;
 }
-.btn-outline-dark {
+.btn-warning, .btn-primary, .btn-success {
     font-size: 90%;
-    border-radius: 2rem;
-    font-weight: bold;
+    border-radius: .8rem;
     transition: all 0.5s;
 }
 
@@ -193,10 +192,7 @@ card-register, card-login {
     width: 80px;
 }
 
-.card-body .col-md-6 {
-    
-     float:left;
-}
+
 
 
 /*Product view*/
@@ -388,8 +384,44 @@ input[type=file] {
 }
 
 
+/*contact*/
 
- 
+.contact img:hover {
+    transform: scale(1.1, 1.1);
+}
+
+
+
+.contact .contact-img {
+    height: 140px;
+    overflow: hidden;
+    border-radius: 1rem;
+    margin: 10px;
+    margin-left: 40px;
+}
+
+.contact img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s;
+}
+
+.contact li:hover img {
+    transform: scale(1.1, 1.1);
+}
+
+.contact a {
+    color: black;
+}
+.contact p {
+    margin: 4px;
+}
+
+.contact .contact-info {
+    margin-left: 40px;
+}
+  
 
 
     

@@ -8,7 +8,11 @@ namespace CustomerClient.Data
 {
     public interface IUserService
     {
-        Task<User> ValidateUser(string Email, string password);
+        Task<User> ValidateUser(string email, string password);
         Task AddUserAsync(User user);
+        Task<User> getUserByIdAsync(int id);
+        Task<User> UpadteUserAsync(User user);
+        void setUserId(int id);
+        int getUserId();
     }
 }

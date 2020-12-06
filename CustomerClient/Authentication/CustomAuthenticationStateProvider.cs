@@ -78,13 +78,17 @@ namespace CustomerClient.Authentication
                 NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));
             }
 
-            private ClaimsIdentity SetupClaimsForUser(User user)
-            {
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name, user.Email));
+        private ClaimsIdentity SetupClaimsForUser(User user)
+        {
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim(ClaimTypes.StreetAddress, user.Address));
+            claims.Add(new Claim(ClaimTypes.Name, user.Name));
+            claims.Add(new Claim(ClaimTypes.MobilePhone, user.Phone));
+            claims.Add(new Claim(ClaimTypes.SerialNumber, user.UserID.ToString()));
 
-                ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
-                return identity;
-            }
+            ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
+            return identity;
         }
+    }
 }
