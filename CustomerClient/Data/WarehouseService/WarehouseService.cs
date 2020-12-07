@@ -32,6 +32,15 @@ namespace CustomerClient.Data
             return result;
         }
 
-        
+        public async Task<List<CartProduct>> GetNotWarehouseProductFromStore(int productid, int quantity)
+        {
+            string message = await client.GetStringAsync(uri + "/" + productid + "/" + quantity + "/" + quantity);
+            List<CartProduct> result = JsonSerializer.Deserialize<List<CartProduct>>(message);
+            return result;
+        }
+
+
+
+
     }
 }

@@ -38,5 +38,12 @@ namespace CustomerClient.Data
             string message = await client.GetStringAsync(uri + "/1/1/1");
             return JsonSerializer.Deserialize<int>(message);
         }
+
+        public async Task<List<Transaction>> getTransactionsByEmail(string email)
+        {
+            string message = await client.GetStringAsync(uri + "/" + email);
+            List<Transaction> returnList = JsonSerializer.Deserialize<List<Transaction>>(message);
+            return returnList;
+        }
     }
 }

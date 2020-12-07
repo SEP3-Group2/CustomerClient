@@ -1,0 +1,140 @@
+﻿@page "/orderHistory"
+@using CustomerClient.Models
+@using CustomerClient.Data
+@using System.IO
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject ITransactionService TransactionService
+@inject ITransactionProductService TransactionProductService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+
+@if (lastId == 0)
+{
+    <h3>You dont have order history</h3>
+}
+else
+{
+    <h3>OrderHistory</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Product Title</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Total price</th>
+                <th>Store</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in usersTransactions)
+            {
+                lastId = transaction.Id;
+                <tr class="rowsToColor">
+                    <td>@transaction.Id</td>
+
+                    <td>
+                        @foreach (var product in usersOrders)
+                        {
+                            if (lastId == product.Transactionid)
+                            {
+                        <tr>@product.Title</tr>
+                    }
+
+
+                }
+                        </td>
+
+                    <td>
+                        @foreach (var product in usersOrders)
+                        {
+                            if (lastId == product.Transactionid)
+                            {
+                            <tr>@product.Category</tr>
+                        }
+
+                    }
+                        </td>
+
+                        <td>
+                            @foreach (var product in usersOrders)
+                            {
+                                if (lastId == product.Transactionid)
+                                {
+                                <tr>@product.Quantity</tr>
+                            }
+
+                        }
+                            </td>
+
+                            <td>
+                                @transaction.TotalPrice
+                            </td>
+                            @if (transaction.StoreId == 1)
+                            {
+                                <td>
+                                    Horsens
+                                </td>
+                            }
+                            @if (transaction.StoreId == 2)
+                            {
+                                <td>
+                                    Aalborg
+                                </td>
+                            }
+                            @if (transaction.StoreId == 3)
+                            {
+                                <td>
+                                </td>
+                            }
+
+
+                            <td>
+                                @transaction.DeliveryMethod
+                            </td>
+
+                            </tr>
+                        }
+            </tbody>
+        </table>
+    }
+@code {
+    List<Transaction> usersTransactions = new List<Transaction>();
+    List<HistoryProduct> usersOrders = new List<HistoryProduct>();
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private string usersEmail = "";
+    int lastId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await authenticationStateTask).User;
+        usersEmail = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value.ToString();
+
+        usersTransactions = await TransactionService.getTransactionsByEmail(usersEmail);
+
+        if (usersTransactions.Count == 0)
+        {
+            lastId = 0;
+        }
+        else
+        {
+            lastId = usersTransactions.First(tr => tr.Id != -1).Id;
+        }
+
+
+        foreach (var trans in usersTransactions)
+        {
+            usersOrders.AddRange(await TransactionProductService.getTransProById(trans.Id));
+        }
+
+
+
+    }
+}

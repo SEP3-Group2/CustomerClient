@@ -31,5 +31,17 @@ namespace CustomerClient.Data
 
             await client.PostAsync($"{uri}", content);
         }
+
+        public async Task<List<HistoryProduct>> getTransProById(int transid)
+        {
+            string message = await client.GetStringAsync(uri + "/" + transid);
+            List<HistoryProduct> returnList = JsonSerializer.Deserialize<List<HistoryProduct>>(message);
+            return returnList;
+        }
+
+        public List<HistoryProduct> GetHistoryProducts(int id)
+        {
+            return getTransProById(id).Result;
+        }
     }
 }
