@@ -14,12 +14,27 @@ namespace CustomerClient.Data
         private int userId;
 
         HttpClient client;
-        string uri = "http://localhost:8080/customerUsers"; 
+        string uri = "http://localhost:8080/customerUsers";
+
+        private bool comingFromDelivery = false;
+        private bool cartHidden = false;
+        private bool orderHidden = true;
 
         public CloudUserService()
         {
             client = new HttpClient();
         }
+
+        public void setBool(bool comingFromDelivery)
+        {
+            this.comingFromDelivery = comingFromDelivery;
+        }
+
+        public bool getBool()
+        {
+            return comingFromDelivery;
+        }
+
 
         public async Task AddUserAsync(User user)
         {

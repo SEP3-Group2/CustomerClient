@@ -32,6 +32,9 @@ namespace CustomerClient
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<IProductService, ProductService>();
+            services.AddSingleton<IWarehouseService, WarehouseService>();
+            services.AddSingleton<ITransactionService, TransactionService>();
+            services.AddSingleton<ITransactionProductService, TransactionProductService>();
             services.AddScoped<IUserService, CloudUserService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddSingleton<IImagesService, ImagesService>();

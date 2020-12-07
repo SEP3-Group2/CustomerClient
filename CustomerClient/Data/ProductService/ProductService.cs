@@ -12,7 +12,13 @@ namespace CustomerClient.Data
     {
         HttpClient client;
         private string uri = "http://localhost:8080/products";
+
         private int productId = 0;
+
+        //need for cart
+        private List<ProductQuantity> Cart = new List<ProductQuantity>();
+        List<Int32> quantities = new List<Int32>();
+        private List<string> titles = new List<string>();
 
         public ProductService()
         {
@@ -33,7 +39,7 @@ namespace CustomerClient.Data
             return result;
         }
 
-       
+
 
         public async Task<IList<Product>> GetTitleCategoryPriceFilteredProductsAsync(string title, string category, string price)
         {
@@ -73,6 +79,49 @@ namespace CustomerClient.Data
         public int getProductId()
         {
             return productId;
+        }
+
+        public void addProductToCart(ProductQuantity product, int quantity)
+        {
+            if (Cart.Count() == 0)
+            {
+                Cart.Add(product);
+                quantities.Add(quantity);
+                titles.Add(product.Title);
+            }
+            else
+            {
+                if (titles.Contains(product.Title))
+                {
+                    //Error message: already added
+                }
+                else
+                {
+                    Cart.Add(product);
+                    quantities.Add(quantity);
+                    titles.Add(product.Title);
+                }
+            }    
+        }
+
+        public List<ProductQuantity> getProductsFromCart()
+        {
+            return Cart;
+        }
+
+        public void RemoveProductFromCart(ProductQuantity product)
+        {
+            Cart.Remove(product);
+        }
+
+        public List<string> getTitles()
+        {
+            return titles;
+        }
+
+        public void RemoveTitle(ProductQuantity product)
+        {
+            titles.Remove(product.Title);
         }
     }
 }

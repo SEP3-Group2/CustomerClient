@@ -14,5 +14,8 @@ namespace CustomerClient.Data
         Task<User> UpadteUserAsync(User user);
         void setUserId(int id);
         int getUserId();
+
+        void setBool(bool comingFromDelivery);
+        bool getBool();
     }
 }

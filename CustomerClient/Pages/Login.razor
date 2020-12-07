@@ -7,6 +7,8 @@
 @inject IUserService UserService
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Authorization
+@inject IUserService CloudUserService
+
 <AuthorizeView>
     <NotAuthorized>
 
@@ -66,6 +68,11 @@
             UserService.setUserId(int.Parse(userPrincipal.FindFirst(c => c.Type == ClaimTypes.SerialNumber)?.Value));
             Email = "";
             password = "";
+            if (CloudUserService.getBool() == true)
+            {
+                NavigationManager.NavigateTo("/cart");
+                CloudUserService.setBool(false);
+            }
         }
         catch (Exception e)
         {
