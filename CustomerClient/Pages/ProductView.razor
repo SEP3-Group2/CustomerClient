@@ -53,27 +53,28 @@
 
                         <p> @productToShow.Description </p>
 
-                    <div class="product_meta">
-                        <span class="posted_in"> <strong>Categorie:</strong> <p>@productToShow.Category</p></span>
+                        <div class="product_meta">
+                            <span class="posted_in"> <strong>Categorie:</strong> <p>@productToShow.Category</p></span>
+                        </div>
+                        <div> <strong>Price : </strong> <span> @productToShow.Price DKK</span></div>
+                        <div class="form-group">
+                            <label><strong>Quantity (Max 5): </strong></label>
+                            <input class="form-control quantity" type="number" @bind="quantity" style="width:65px" />
+                            @if (quantity > 5)
+                            {
+                                quantity = 5;
+                            }
+                            @if (quantity < 1)
+                            {
+                                quantity = 0;
+                            }
+                        </div>
+                        <p>
+                            <button class="btn btn-primary" type="button" @onclick="addToCart"><i class="material-icons">add_shopping_cart</i> Add to Cart</button>
+                        </p>
                     </div>
-                    <div> <strong>Price : </strong> <span> @productToShow.Price DKK</span></div>
-                    <div class="form-group">
-                        <label><strong>Quantity (Max 5): </strong></label>
-                        <input class="form-control quantity" type="number" @bind="quantity" style="width:65px" />
-                        @if (quantity > 5)
-                        {
-                            quantity = 5;
-                        }
-                        @if (quantity < 1)
-                        {
-                            quantity = 0;
-                        }
-                    </div>
-                    <p>
-                        <button class="btn btn-primary" type="button" @onclick="addToCart"><i class="material-icons">add_shopping_cart</i> Add to Cart</button>
-                    </p>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
