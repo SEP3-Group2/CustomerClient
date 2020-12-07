@@ -1,7 +1,145 @@
 ﻿@page "/profile"
+@using CustomerClient.Models;
+@using CustomerClient.Data;
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize]
 
-<h3>Profile</h3>
+<EditForm Model="@userProfile" OnValidSubmit="@UpdateUserInformation">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-9 mx-auto">
+                <div class="card card-register">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Profile Info</h5>
+                        <form class="form-register">
+
+                            <div class="form-label-group">
+
+                                <label><i class="material-icons"> email </i> Email: </label>
+                                <InputText class="form-control" @bind-Value="userProfile.Email" placeholder="Email" required />
+
+                                <label><i class="material-icons"> account_box </i> Name:</label>
+                                <InputText class="form-control" @bind-Value="userProfile.Name" placeholder="Name" required />
+
+                                <label><i class="material-icons"> home </i> Address:</label>
+                                <InputText class="form-control" @bind-Value="userProfile.Address" placeholder="Address" required />
+
+                                <label><i class="material-icons"> perm_phone_msg </i> Phone Number:</label>
+                                <InputText class="form-control" @bind-Value="userProfile.Phone" placeholder="Phone Number" required />
+
+
+                            </div>
+
+
+                            <div class=" row form-label-group">
+                                <div class="col-md-6">
+                                    <label><i class="material-icons"> lock </i> Password:</label>
+                                    <InputText class="form-control" @bind-Value="userProfile.Password" placeholder="Password" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label><i class="material-icons"> lock </i> Confirm Password:</label>
+                                    <InputText class="form-control" @bind-Value="confirmPassword" placeholder="Confirm Password" required />
+                                </div>
+
+                            </div>
+
+                        </form>
+                        <button class="btn btn-warning  text-uppercase" type="submit" style="margin-left: .5rem;">Update</button>
+                        <a class="btn btn-primary  text-uppercase" href="#">Back</a>
+
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(error))
+                    {
+                        <div class="alert alert-danger">
+                            @error
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(passwordError))
+                    {
+                        <div class="alert alert-danger">
+                            @passwordError
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(message))
+                    {
+                        <div class="alert alert-success">
+                            @message
+                        </div>
+                    }
+
+                </div>
+
+                <footer>
+                    <div class="footer-copyright text-center py-3">
+                        © 2020 Copyright Group3
+                    </div>
+
+                </footer>
+
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+
+
+
+    private User userProfile = new User();
+    private string password;
+    private string confirmPassword;
+    string message = String.Empty;
+    string error = String.Empty;
+    string passwordError = String.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("UserId" + UserService.getUserId());
+
+        userProfile = await UserService.getUserByIdAsync(UserService.getUserId());
+        var logedUser = (await authenticationStateTask).User;
+
+    }
+
+
+
+    private async void UpdateUserInformation()
+    {
+        message = String.Empty;
+        error = String.Empty;
+        passwordError = String.Empty;
+        if ( userProfile.Password.Equals(confirmPassword))
+        {
+            var updateUser = await UserService.UpadteUserAsync(userProfile);
+            if (updateUser.Equals(userProfile))
+            {
+                message = "Your information has been updated";
+            }
+            else
+            {
+
+                error = "Your information failed to update";
+            }
+        }
+        else
+        {
+            passwordError = "Password dose not match";
+        }
+
+        StateHasChanged();
+
+    }
 
 }
