@@ -9,5 +9,6 @@ namespace CustomerClient.Data
     interface ITransactionProductService
     {
         Task AddTransactionProductAsync(TransactionProduct transactionProduct);
+        Task<List<HistoryProduct>> getTransProById(int transid);
     }
 }

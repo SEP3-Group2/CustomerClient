@@ -9,7 +9,7 @@ namespace CustomerClient.Data
     interface ITransactionService
     {
         Task AddTransactionAsync(Transaction transaction);
-
         Task<int> GetLastTransactiontID();
+        Task<List<Transaction>> getTransactionsByEmail(string email);
     }
 }
