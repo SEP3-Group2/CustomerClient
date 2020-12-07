@@ -28,5 +28,19 @@ namespace CustomerClient.Models
 
         [JsonPropertyName("birthday")]
         public DateTime Birthday { get; set; }
+
+        public bool Equals(User user)
+        {
+            return
+                   UserID == user.UserID &&
+                   Email == user.Email &&
+                   Password == user.Password &&
+                   Name == user.Name &&
+                   Address == user.Address &&
+                   Phone == user.Phone &&
+                   Birthday == user.Birthday;
+        }
     }
+
+   
 }

@@ -29,20 +29,30 @@
                                 <label><i class="material-icons"> home </i> Address:</label>
                                 <InputText class="form-control" @bind-Value="newUser.Address" placeholder="Address" required />
 
-                                <label><i class="material-icons"> perm_phone_msg </i> Phone Number:</label>
-                                <InputText class="form-control" @bind-Value="newUser.Phone" placeholder="Phone Number" required />
+                                <div class="row">
+                                    <div class="col-md-6 ">
+                                        <label><i class="material-icons"> perm_phone_msg </i> Phone Number:</label>
+                                        <InputText class="form-control" @bind-Value="newUser.Phone" placeholder="Phone Number" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label><i class="material-icons"> calendar_today </i> Date Of Birth:</label> <br />
+                                        <InputDate type="date" @bind-Value="@_endDate" rows="1" />
+                                    </div>
+                                </div>
+                               
 
-                                <label><i class="material-icons"> calendar_today </i> Date:</label> <br />
-                                <InputDate type="date" @bind-Value="@_endDate" rows="1" />
+                               
                             </div>
 
-                            <div class="form-label-group">
-                                <label><i class="material-icons"> lock </i> Password:</label>
-                                <InputText class="form-control" type="password" @bind-Value="password" placeholder="Password" required />
-
-                                <label><i class="material-icons"> lock </i> Confirm Password:</label>
-                                <InputText class="form-control" type="password" @bind-Value="confirmPassword" placeholder="Confirm Password" required />
-
+                            <div class="row form-label-group">
+                                <div class="col-md-6">
+                                    <label><i class="material-icons"> lock </i> Password:</label>
+                                    <InputText class="form-control" type="password" @bind-Value="password" placeholder="Password" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label><i class="material-icons"> lock </i> Confirm Password:</label>
+                                    <InputText class="form-control" type="password" @bind-Value="confirmPassword" placeholder="Confirm Password" required />
+                                </div>
                             </div>
 
                         </form>
@@ -64,45 +74,6 @@
         </div>
     </div>
 </EditForm>
-
-<!--
-    <EditForm Model="@newUser" OnValidSubmit="@AddNewUser">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div class="form-group">
-            Email:<br />
-            <InputText rows="1" @bind-Value="newUser.Email"></InputText>
-        </div>
-        <div class="form-group">
-            Name:<br />
-            <InputText rows="1" @bind-Value="newUser.Name"></InputText>
-        </div>
-        <div class="form-group">
-            Address:<br />
-            <InputText rows="1" @bind-Value="newUser.Address"></InputText>
-        </div>
-        <div class="form-group">
-            Phone Number:<br />
-            <InputText rows="1" @bind-Value="newUser.Phone"></InputText>
-        </div>
-        <div class="form-group">
-            Birthday:<br />
-            <InputDate type="date" @bind-Value="@_endDate" rows="1"></InputDate>
-        </div>
-        <div class="form-group">
-            Password:<br />
-            <InputText type="password" rows="1" @bind-Value="password"></InputText>
-        </div>
-        <div class="form-group">
-            Confirm password:<br />
-            <InputText type="password" rows="1" @bind-Value="confirmPassword"></InputText>
-        </div>
-        <p class="actions">
-            <button class="btn btn-outline-dark" type="submit">Create</button>
-        </p>
-    </EditForm> -->
-
 
 @code {
     private User newUser = new User();

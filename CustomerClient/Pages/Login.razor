@@ -1,10 +1,14 @@
 ﻿@page "/login"
 @namespace LoginComponent
 @using CustomerClient.Authentication
-@using CustomerClient.Data
+@using CustomerClient.Data;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject IUserService UserService
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IUserService CloudUserService
+
 <AuthorizeView>
     <NotAuthorized>
 
@@ -52,13 +56,16 @@
     private string Email;
     private string password;
     private string errorMessage;
-
+    [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
     public async Task PerformLogin()
     {
         errorMessage = "";
         try
         {
-            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(Email, password);
+           await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(Email, password);
+            var userPrincipal = (await AuthStat).User;
+
+            UserService.setUserId(int.Parse(userPrincipal.FindFirst(c => c.Type == ClaimTypes.SerialNumber)?.Value));
             Email = "";
             password = "";
             if (CloudUserService.getBool() == true)
