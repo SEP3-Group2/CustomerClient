@@ -131,7 +131,8 @@ else
                                 </form>
 
                                 <button class="btn btn-outline-success btn-block text-uppercase" type="submit" style="margin-left: .5rem;">Deliver Items</button>
-
+                                <a class="btn btn-outline-success btn-block text-uppercase" @onclick="goToLogin" style="margin-left: .5rem;">Login</a>
+                                <a class="btn btn-outline-primary btn-block text-uppercase" @onclick="backToCart" style="margin-left: .5rem;">Back</a>
                             </div>
                         </div>
 
@@ -148,8 +149,7 @@ else
         </EditForm>
 
         //these two buttons cannot be inside editform
-        <button class="btn btn-outline-success btn-block text-uppercase" @onclick="goToLogin" style="margin-left: .5rem;">Login</button>
-        <button class="btn btn-outline-primary btn-block text-uppercase" @onclick="backToCart" style="margin-left: .5rem;">Back</button>
+        
     }
     @if (reservationHidden == false)
     {

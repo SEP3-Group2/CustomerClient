@@ -34,7 +34,7 @@ namespace CustomerClient.Data
 
         public async Task<List<CartProduct>> GetNotWarehouseProductFromStore(int productid, int quantity)
         {
-            string message = await client.GetStringAsync(uri + "/" + productid + "/" + quantity + "/" + quantity);
+            string message = await client.GetStringAsync(uri + "/" + productid + "/" + quantity + "/" + quantity + "/" + quantity);
             List<CartProduct> result = JsonSerializer.Deserialize<List<CartProduct>>(message);
             return result;
         }
