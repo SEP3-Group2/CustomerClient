@@ -1,4 +1,8 @@
-﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
+﻿@using CustomerClient.Models;
+@using CustomerClient.Data;
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a href="#" class="navbar-brand"><b>SELLECTRIC</b></a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
@@ -9,18 +13,19 @@
             <a href="/" class="nav-item nav-link">Home</a>
             <a href="products" class="nav-item nav-link">Products</a>
 
-
-
-            <a href="profile" class="nav-item nav-link">Profile</a>
+            <AuthorizeView >
+                <a href="profile" class="nav-item nav-link">Profile</a>
+            </AuthorizeView>
             <a href="register" class="nav-item nav-link">Sign up</a>
+            <a href="contact" class="nav-item nav-link">Contact</a>
             <a href="cart" class="nav-item nav-link">Cart</a>
         </div>
 
         <div class="navbar-nav ml-auto action-buttons">
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle mr-4">Login</a>
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle mr-4">Log in/out</a>
                 <div class="dropdown-menu action-form">
-                   <LoginComponent.Login/>
+                    <LoginComponent.Login />
                 </div>
             </div>
         </div>
@@ -28,5 +33,5 @@
 </nav>
 
 @code {
-   
+  
 }
