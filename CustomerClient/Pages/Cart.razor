@@ -12,8 +12,8 @@
 
 @if (cartHidden == false)
 {
-    <table class="table">
-        <thead>
+    <table class="table cartTable">
+        <thead class="cartThead">
             <tr>
                 <th>Title</th>
                 <th>Category</th>
@@ -22,7 +22,7 @@
                 <th>Remove from Cart</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="cartTbody">
             @foreach (var product in products.ToList())
             {
                 <tr>
@@ -33,8 +33,8 @@
                         <input type="number" @bind=@product.Quantity style="width:55px" />
                     </td>
                     <td>
-                        <button @onclick="@(() => RemoveFromCart(product))">
-                            <i class="oi oi-trash" style="color:red" />
+                        <button style="background:transparent; outline:none; border:none;"  @onclick="@(() => RemoveFromCart(product))">
+                            <i class="material-icons">delete</i>
                         </button>
                     </td>
                 </tr>

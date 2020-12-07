@@ -5,27 +5,33 @@ body {
     font-family:  sans-serif;
 }
 
+
 .navbar {
     padding-left: 16px;
     padding-right: 16px;
     border-bottom: 1px solid #dfe3e8;
     border-radius: 0;
 }
-    .navbar img {
+
+
+.navbar img {
         height:100px;
         width:180px;
 
-    }
+}
 
-    .navbar .navbar-brand {
+
+.navbar .navbar-brand {
         padding-left: 0;
         font-size: 20px;
         padding-right: 50px;
-    }
+}
 
-    .navbar .navbar-brand b {
+
+.navbar .navbar-brand b {
         color: goldenrod;
-    }
+}
+
 
 .navbar a {
     
@@ -50,11 +56,11 @@ body {
     font-size: 14px;
 }
 
-    .navbar .action-form a {
+.navbar .action-form a {
         
-        padding: 5px !important;
-        font-size: 18px;
-    }
+    padding: 5px !important;
+    font-size: 18px;
+}
 
    
 
@@ -118,7 +124,7 @@ card-register, card-login {
     width: 100%;
 }
 
-    .btn-outline-success {
+.btn-outline-success {
         font-size: 90%;
         border-radius: 2rem;
         letter-spacing: .1rem;
@@ -129,7 +135,9 @@ card-register, card-login {
         margin-top: 2rem;
         margin-bottom: 2rem;
        
-    }
+}
+
+
 .btn-outline-danger {
     font-size: 90%;
     border-radius: 2rem;
@@ -137,6 +145,8 @@ card-register, card-login {
     font-weight: bold;
     transition: all 0.5s;
 }
+
+
 .btn-outline-dark {
     font-size: 90%;
     border-radius: 2rem;
@@ -144,18 +154,19 @@ card-register, card-login {
     transition: all 0.5s;
 }
 
-    .form-label-group {
+
+.form-label-group {
         position: relative;
         margin-bottom: 1rem;
         margin-right: 1.5rem;
-    }
+}
 
-    .form-label-group input, .form-label-group select, .form-label-group InputTextArea {
+.form-label-group input, .form-label-group select, .form-label-group InputTextArea {
         height: auto;
         padding: 1rem;
         border-radius: 2rem;
         margin:1rem;
-    }
+}
 
 /*Product view*/
 .pro-img-details {
@@ -188,7 +199,6 @@ card-register, card-login {
 }
 
 
-
 .quantity {
     width: 80px;
 }
@@ -200,9 +210,27 @@ card-register, card-login {
 
 
 
+/*CartView*/
+.cartTable {
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 10px;
+}
 
- 
+
+.cartThead tr {
+    background-color: dimgrey;
+    color: #ffffff;
+    text-align: left;
+}
 
 
-    
+.cartTbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
 
