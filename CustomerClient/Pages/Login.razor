@@ -33,6 +33,12 @@
                         <button class="btn btn-outline-success btn-block text-uppercase" type="submit" @onclick="PerformLogin">Login</button>
                         <p class="text-center">Don't have an account? <a class="btn btn-primary" href="Register">Sign up</a> </p>
                     </div>
+                    @if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        <div class="alert alert-danger">
+                            @errorMessage
+                        </div>
+                    }
 
                 </div>
 
@@ -62,7 +68,7 @@
         errorMessage = "";
         try
         {
-           await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(Email, password);
+            await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(Email, password);
             var userPrincipal = (await AuthStat).User;
 
             UserService.setUserId(int.Parse(userPrincipal.FindFirst(c => c.Type == ClaimTypes.SerialNumber)?.Value));
