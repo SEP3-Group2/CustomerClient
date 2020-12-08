@@ -18,8 +18,8 @@ else
 {
     <h3>OrderHistory</h3>
 
-    <table class="table">
-        <thead>
+    <table class="table cartTable">
+        <thead class="cartThead">
             <tr>
                 <th>Transaction ID</th>
                 <th>Product Title</th>
@@ -30,7 +30,7 @@ else
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="cartTbody">
             @foreach (var transaction in usersTransactions)
             {
                 lastId = transaction.Id;

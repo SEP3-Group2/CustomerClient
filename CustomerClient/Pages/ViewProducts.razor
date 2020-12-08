@@ -72,9 +72,11 @@ else
                 <div class="col-md-3 col-sm-6">
                     <div class="product-grid">
                         <div class="product-image">
+                           
 
                             <a href="#" @onclick="() => TrClickedAtIndex(product.ID)">
-                                @if (!(productCount >= productsToShow.Count * 2))
+
+                                  @if (!(productCount >= productsToShow.Count * 2))
                                 {
                                     <img class="pic-1" src="@images[productCount]" />
                                     if (true)
@@ -89,7 +91,7 @@ else
                                 }
                             </a>
                             <ul class="social">
-                                <li><a href="#" @onclick="() => TrClickedAtIndex(product.ID)"><i class="material-icons">visibility</i></a></li>
+                                <li><a href="#" @onclick="() => TrClickedAtIndex(product.ID)"><i class="material-icons"></i></a></li>
                             </ul>
                         </div>
                         <div class="product-content">
@@ -166,7 +168,7 @@ else
 
 
     private IList<string> imageDataUrls = new List<string>();
-   
+
     private List<string> images = new List<string>();
     string placeholder = "../css/ps4.PNG";
     string placeholder2 = "../css/ps4-pro-1tb.jpg";
