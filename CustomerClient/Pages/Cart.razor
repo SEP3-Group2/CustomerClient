@@ -149,7 +149,7 @@ else
         </EditForm>
 
         //these two buttons cannot be inside editform
-        
+
     }
     @if (reservationHidden == false)
     {
@@ -189,7 +189,7 @@ else
                                 <form class="form-register">
 
                                     <div class="form-label-group">
-                                        <label> <i class="material-icons"> category </i> Category:</label>
+                                        <label> <i class="material-icons"> store </i> Store:</label>
 
                                         <select class="form-control" @bind="storename" required>
                                             @if (stores.Count == 0)
@@ -619,6 +619,7 @@ else
                 newOne.Quantity = product.Quantity;
                 newOne.TransactionId = lastTransactionid;
                 await TransactionProductService.AddTransactionProductAsync(newOne);
+                await WarehouseService.UpdateWarehouseQuantity(storeIdDeliver, product.ID, product.Quantity);
             }
 
             SuccessDeliver();
