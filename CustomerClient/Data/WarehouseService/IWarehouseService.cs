@@ -11,5 +11,7 @@ namespace CustomerClient.Data
         Task<List<Product>> GetAllProductsFromStore(int storeid);
         Task<List<CartProduct>> GetWarehouseProductFromStore(int productid, int quantity);
         Task<List<CartProduct>> GetNotWarehouseProductFromStore(int productid, int quantity);
+
+        Task UpdateWarehouseQuantity(int storeid, int productid, int quantity);
     }
 }
