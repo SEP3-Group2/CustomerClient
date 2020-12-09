@@ -38,6 +38,7 @@ namespace CustomerClient
             services.AddScoped<IUserService, CloudUserService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddSingleton<IImagesService, ImagesService>();
+            services.AddSingleton<IRatingService, RatingService>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("SecurityLevel1", a =>
