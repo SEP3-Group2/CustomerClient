@@ -39,9 +39,5 @@ namespace CustomerClient.Data
             return returnList;
         }
 
-        public List<HistoryProduct> GetHistoryProducts(int id)
-        {
-            return getTransProById(id).Result;
-        }
     }
 }

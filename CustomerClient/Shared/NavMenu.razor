@@ -2,40 +2,92 @@
 @using CustomerClient.Data;
 @inject IUserService UserService
 @inject NavigationManager NavigationManager
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a href="#" class="navbar-brand"><b>SELLECTRIC</b></a>
-    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+@using CustomerClient.Authentication
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IUserService UserService
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IUserService CloudUserService
+@inject IJSRuntime JS;
 
-    <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
-        <div class="navbar-nav">
-            <a href="/" class="nav-item nav-link">Home</a>
-            <a href="products" class="nav-item nav-link">Products</a>
 
-            <AuthorizeView >
-                <a href="profile" class="nav-item nav-link">Profile</a>
-            </AuthorizeView>
-            <a href="register" class="nav-item nav-link">Sign up</a>
-            <a href="contact" class="nav-item nav-link">Contact</a>
-            <a href="cart" class="nav-item nav-link">Cart</a>
-            <AuthorizeView>
-                <a href="orderHistory" class="nav-item nav-link">Order History</a>
-            </AuthorizeView>
-            
-        </div>
 
-        <div class="navbar-nav ml-auto action-buttons">
-            <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle mr-4">Log in/out</a>
-                <div class="dropdown-menu action-form">
-                    <LoginComponent.Login />
+<AuthorizeView>
+    <NotAuthorized>
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a href="#" class="navbar-brand"><b>SELLECTRIC</b></a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+                    <div class="navbar-nav">
+                        <a href="/" class="nav-item nav-link">Home</a>
+
+                        <a href="products" class="nav-item nav-link">Products</a>
+
+                        <a href="cart" class="nav-item nav-link">Cart</a>
+
+                        <a href="register" class="nav-item nav-link">Sign up</a>
+
+                        <a href="contact" class="nav-item nav-link">Contact</a>
+
+                    </div>
+
+                    <div class="navbar-nav ml-auto action-buttons">
+                        <div class="nav-item dropdown">
+                            <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle mr-4">Log in/out</a>
+                            <div class="dropdown-menu action-form">
+                                <LoginComponent.Login />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </nav>
+    </NotAuthorized>
+    <Authorized>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a href="#" class="navbar-brand"><b>SELLECTRIC</b></a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+                <div class="navbar-nav">
+                    <a href="/" class="nav-item nav-link">Home</a>
+
+                    <a href="products" class="nav-item nav-link">Products</a>
+
+                    <a href="profile" class="nav-item nav-link">Profile</a>
+
+                    <a href="cart" class="nav-item nav-link">Cart</a>
+
+                    <a href="orderHistory" class="nav-item nav-link">Order History</a>
+
+                    <a href="contact" class="nav-item nav-link">Contact</a>
+
+                </div>
+
+                <div class="navbar-nav ml-auto action-buttons">
+                    <div class="nav-item dropdown">
+                        <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle mr-4">Log in/out</a>
+                        <div class="dropdown-menu action-form">
+                            <LoginComponent.Login />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</nav>
+
+        </nav>
+    </Authorized>
+
+</AuthorizeView>
+
 
 @code {
-  
+
+
+
 }

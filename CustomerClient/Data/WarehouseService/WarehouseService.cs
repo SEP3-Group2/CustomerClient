@@ -39,8 +39,9 @@ namespace CustomerClient.Data
             return result;
         }
 
-
-
-
+        public async Task UpdateWarehouseQuantity(int storeid, int productid, int quantity)
+        {
+            await client.GetStringAsync(uri + "/update/" + storeid + "/" + productid + "/" + quantity);
+        }
     }
 }

@@ -8,6 +8,7 @@
 @using Syncfusion.Blazor.Inputs
 @using CustomerClient.Data.ImagesService
 @inject IImagesService ImageService
+
 <div class="container">
     <div class="row searchFilter">
 
@@ -72,23 +73,15 @@ else
                     <div class="product-grid">
                         <div class="product-image">
 
+                            <img class="pic-1" src="../css/ps4.PNG" />
+
+                            <img class="pic-2" src="../css/ps4-pro-1tb.jpg" />
+
+
                             <a href="#" @onclick="() => TrClickedAtIndex(product.ID)">
-                                @if (!(productCount >= productsToShow.Count * 2))
-                                {
-                                    <img class="pic-1" src="@images[productCount]" />
-                                    if (true)
-                                    {
-                                        productCount++;
-                                    }
-                                    <img class="pic-2" src="@images[productCount]" />
-                                    if (true)
-                                    {
-                                        productCount++;
-                                    }
-                                }
                             </a>
                             <ul class="social">
-                                <li><a href="#" @onclick="() => TrClickedAtIndex(product.ID)"><i class="material-icons">visibility</i></a></li>
+                                <li><a href="#" @onclick="() => TrClickedAtIndex(product.ID)"><i class="material-icons"> visibility</i></a></li>
                             </ul>
                         </div>
                         <div class="product-content">
@@ -97,6 +90,35 @@ else
                                 @product.Price DKK
                             </div>
                         </div>
+                        <!--
+    <div class="product-image">
+
+        <a href="#" @onclick="() => TrClickedAtIndex(product.ID)">
+
+              @if (!(productCount >= productsToShow.Count * 2))
+            {
+                <img class="pic-1" src="@images[productCount]" />
+                if (true)
+                {
+                    productCount++;
+                }
+                <img class="pic-2" src="@images[productCount]" />
+                if (true)
+                {
+                    productCount++;
+                }
+            }
+        </a>
+        <ul class="social">
+            <li><a href="#" @onclick="() => TrClickedAtIndex(product.ID)"><i class="material-icons"></i>visibility</a></li>
+        </ul>
+    </div>
+    <div class="product-content">
+        <h3 class="title"><a> @product.Title</a></h3>
+        <div class="price">
+            @product.Price DKK
+        </div>
+    </div>-->
                     </div>
                 </div>
             }
@@ -131,12 +153,12 @@ else
         products = await ProductService.GetTitleCategoryPriceFilteredProductsAsync(Title, Category, Price);
         productsToShow = products;
 
-        FillImagesWithPlaceholders();
+      /*  FillImagesWithPlaceholders();
 
         foreach (var product in productsToShow)
         {
             await GetImagesFromID(product.ID);
-        }
+        }*/
     }
     //filters here
     private async Task ExecuteSearch()
@@ -165,7 +187,7 @@ else
 
 
     private IList<string> imageDataUrls = new List<string>();
-   
+
     private List<string> images = new List<string>();
     string placeholder = "../css/ps4.PNG";
     string placeholder2 = "../css/ps4-pro-1tb.jpg";

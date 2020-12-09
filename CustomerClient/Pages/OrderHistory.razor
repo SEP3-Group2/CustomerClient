@@ -18,8 +18,8 @@ else
 {
     <h3>OrderHistory</h3>
 
-    <table class="table">
-        <thead>
+    <table class="table cartTable">
+        <thead class="cartThead">
             <tr>
                 <th>Transaction ID</th>
                 <th>Product Title</th>
@@ -30,7 +30,7 @@ else
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="cartTbody">
             @foreach (var transaction in usersTransactions)
             {
                 lastId = transaction.Id;
@@ -72,7 +72,7 @@ else
                             </td>
 
                             <td>
-                                @transaction.TotalPrice
+                                @transaction.TotalPrice DKK
                             </td>
                             @if (transaction.StoreId == 1)
                             {
@@ -89,6 +89,7 @@ else
                             @if (transaction.StoreId == 3)
                             {
                                 <td>
+                                    Frederiksberg
                                 </td>
                             }
 
@@ -133,8 +134,5 @@ else
         {
             usersOrders.AddRange(await TransactionProductService.getTransProById(trans.Id));
         }
-
-
-
     }
 }

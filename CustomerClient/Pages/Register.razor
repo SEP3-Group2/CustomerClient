@@ -16,7 +16,7 @@
                 <div class="card card-register">
                     <div class="card-body">
                         <h5 class="card-title text-center">Sign up</h5>
-                        <form class="form-register">
+                        <div class="form-register">
 
                             <div class="form-label-group">
 
@@ -39,9 +39,9 @@
                                         <InputDate type="date" @bind-Value="@_endDate" rows="1" />
                                     </div>
                                 </div>
-                               
 
-                               
+
+
                             </div>
 
                             <div class="row form-label-group">
@@ -54,11 +54,18 @@
                                     <InputText class="form-control" type="password" @bind-Value="confirmPassword" placeholder="Confirm Password" required />
                                 </div>
                             </div>
-
-                        </form>
-                        <button class="btn btn-outline-success btn-block text-uppercase" type="submit" style="margin-left: .5rem;">Create</button>
-
+                        
+                        </div>
+                        <div class="form-label-group">
+                            <button class="btn btn-outline-success btn-block text-uppercase" type="submit" style="margin-left: .5rem;">Create</button>
+                        </div>
                         <p class="text-center">Have an account? <a class="btn btn-primary" href="Login">Log in</a> </p>
+                        @if (!string.IsNullOrWhiteSpace(message))
+                        {
+                            <div class="alert alert-danger">
+                                @message
+                            </div>
+                        }
                     </div>
 
                 </div>
@@ -81,6 +88,7 @@
 
     private string password;
     private string confirmPassword;
+    string message = String.Empty;
 
     private void AddNewUser()
     {
@@ -92,6 +100,7 @@
             UsersService.AddUserAsync(newUser);
             NavigationManager.NavigateTo("/login");
         }
+        message = "Password does not match!";
     }
 }
 
