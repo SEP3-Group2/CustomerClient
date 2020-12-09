@@ -1,10 +1,17 @@
 ﻿@page "/ProductView"
+
 @using CustomerClient.Models;
 @using CustomerClient.Data;
 @using CustomerClient.Data.ImagesService;
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
 @inject IImagesService ImageService
+@inject IRatingService RatingService
+@inject ITransactionService TransactionService
+@inject ITransactionProductService TransactionProductService
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+
 @using System.Collections
 
 <div class="container">
@@ -72,8 +79,121 @@
                         <p>
                             <button class="btn btn-primary" type="button" @onclick="addToCart"><i class="material-icons">add_shopping_cart</i> Add to Cart</button>
                         </p>
-                    </div>
+                        <AuthorizeView>
+                            @if (didUserBuy)
+                            {
+                                <div>
+                                    @*If user is logged in*@
+                                    <p>
+                                        <h2>Rate this product:</h2> <br />
+                                        <h3>Really bad</h3>
+                                        @if (oneStar)
+                                        {
+                                            <button @onclick="@((args)=> StarRating("oneStar"))"><i class="material-icons">star</i></button>
+                                        }
+                                        else
+                                        {
+                                            <button @onclick="@((args)=> StarRating("oneStarOutline"))"><i class="material-icons">star_outline</i></button>
+                                        }
+                                        @if (twoStar)
+                                        {
+                                            <button @onclick="@((args)=> StarRating("twoStar"))"><i class="material-icons">star</i></button>
+                                        }
+                                        else
+                                        {
+                                            <button @onclick="@((args)=> StarRating("twoStarOutline"))"><i class="material-icons">star_outline</i></button>
+                                        }
+                                        @if (threeStar)
+                                        {
+                                            <button @onclick="@((args)=> StarRating("threeStar"))"><i class="material-icons">star</i></button>
+                                        }
+                                        else
+                                        {
+                                            <button @onclick="@((args)=> StarRating("threeStarOutline"))"><i class="material-icons">star_outline</i></button>
+                                        }
+                                        @if (fourStar)
+                                        {
+                                            <button @onclick="@((args)=> StarRating("fourStar"))"><i class="material-icons">star</i></button>
+                                        }
+                                        else
+                                        {
+                                            <button @onclick="@((args)=> StarRating("fourStarOutline"))"><i class="material-icons">star_outline</i></button>
+                                        }
+                                        @if (fiveStar)
+                                        {
+                                            <button @onclick="@((args)=> StarRating("fiveStar"))"><i class="material-icons">star</i></button>
+                                        }
+                                        else
+                                        {
+                                            <button @onclick="@((args)=> StarRating("fiveStarOutline"))"><i class="material-icons">star_outline</i></button>
+                                        }
 
+                                        <h3>Excellent</h3> <br />
+                                        <h2>Comment:</h2>
+                                        <input type="text" @bind-value="rating.comment" />
+                                        <button @onclick="SubmitRating">Submit Rating</button>
+                                        @if (!String.IsNullOrEmpty(message))
+                                        {
+                                            <div class="alert alert-success">
+                                                @message
+                                            </div>
+                                        }
+                                        @if (!String.IsNullOrEmpty(error))
+                                        {
+                                            <div class="alert alert-danger">
+                                                @error
+                                            </div>
+                                        }
+
+                                    </p>
+                                </div>
+                            }
+                        </AuthorizeView>
+                            <div>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Rating</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var r in allratings)
+                                        {@if (r.productid == productToShow.ID)
+                                            {
+                                                <tr>
+                                                    <td>@r.name</td>
+                                                    @if (r.star == 1)
+                                                    {
+                                                        <td><i class="material-icons">star</i><i class="material-icons">star_outline</i><i class="material-icons">star_outline</i><i class="material-icons">star_outline</i><i class="material-icons">star_outline</i></td>
+                                                    }
+                                                    else if (r.star == 2)
+                                                    {
+                                                        <td><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star_outline</i><i class="material-icons">star_outline</i><i class="material-icons">star_outline</i></td>
+                                                    }
+                                                    else if (r.star == 3)
+                                                    {
+                                                        <td><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star_outline</i><i class="material-icons">star_outline</i></td>
+                                                    }
+                                                    else if (r.star == 4)
+                                                    {
+                                                        <td><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star_outline</i></td>
+                                                    }
+                                                    else if (r.star == 5)
+                                                    {
+                                                        <td><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star</i><i class="material-icons">star</i></td>
+
+                                                    }
+                                                    <td>@r.comment</td>
+                                                </tr>
+                                            }
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,10 +204,29 @@
     private Product productToShow = new Product();
     private ProductQuantity productToCart = new ProductQuantity();
     private int quantity = 0;
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private List<Rating> allratings;
+    private String message = String.Empty;
+    private String error = String.Empty;
+    private List<DidUserBuyJoin> alldidUserBuyJoins;
+    private bool didUserBuy = false;
+
+
+    private Rating rating = new Rating();
+    private bool oneStar = false;
+    private bool twoStar = false;
+    private bool threeStar = false;
+    private bool fourStar = false;
+    private bool fiveStar = false;
 
     protected override async Task OnInitializedAsync()
     {
+        allratings = new List<Rating>();
+        allratings = await RatingService.GetAllRatings();
         productToShow = await ProductService.GetProductByIdAsync(ProductService.getProductId());
+        didUserBuy = await didUserBuyThisProduct();
+
         await GetImagesFromID();
     }
 
@@ -132,6 +271,153 @@
             ProductService.addProductToCart(productToCart, quantity);
         }
     }
+    private void StarRating(string ButtonId)
+    {
+
+        if (ButtonId.Equals("oneStar"))
+        {
+            oneStar = true;
+            twoStar = false;
+            threeStar = false;
+            fourStar = false;
+            fiveStar = false;
+            rating.star = 1;
+        }
+        else if (ButtonId.Equals("oneStarOutline"))
+        {
+            oneStar = true;
+            twoStar = false;
+            threeStar = false;
+            fourStar = false;
+            fiveStar = false;
+            rating.star = 1;
+        }
+        if (ButtonId.Equals("twoStar"))
+        {
+            oneStar = true;
+            twoStar = true;
+            threeStar = false;
+            fourStar = false;
+            fiveStar = false;
+            rating.star = 2;
+        }
+        else if (ButtonId.Equals("twoStarOutline"))
+        {
+            oneStar = true;
+            twoStar = true;
+            threeStar = false;
+            fourStar = false;
+            fiveStar = false;
+            rating.star = 2;
+        }
+        else if (ButtonId.Equals("threeStar"))
+        {
+            oneStar = true;
+            twoStar = true;
+            threeStar = true;
+            fourStar = false;
+            fiveStar = false;
+            rating.star = 3;
+        }
+        else if (ButtonId.Equals("threeStarOutline"))
+        {
+            oneStar = true;
+            twoStar = true;
+            threeStar = true;
+            fourStar = false;
+            fiveStar = false;
+            rating.star = 3;
+        }
+        else if (ButtonId.Equals("fourStar"))
+        {
+            oneStar = true;
+            twoStar = true;
+            threeStar = true;
+            fourStar = true;
+            fiveStar = false;
+            rating.star = 4;
+        }
+        else if (ButtonId.Equals("fourStarOutline"))
+        {
+            oneStar = true;
+            twoStar = true;
+            threeStar = true;
+            fourStar = true;
+            fiveStar = false;
+            rating.star = 4;
+        }
+        else if (ButtonId.Equals("fiveStar"))
+        {
+            oneStar = true;
+            twoStar = true;
+            threeStar = true;
+            fourStar = true;
+            fiveStar = true;
+            rating.star = 5;
+        }
+        else if (ButtonId.Equals("fiveStarOutline"))
+        {
+            oneStar = true;
+            twoStar = true;
+            threeStar = true;
+            fourStar = true;
+            fiveStar = true;
+            rating.star = 5;
+        }
+
+
+    }
+    private async Task<bool> didUserBuyThisProduct()
+    {
+        alldidUserBuyJoins = new List<DidUserBuyJoin>();
+
+        var user = (await authenticationStateTask).User;
+        alldidUserBuyJoins = await RatingService.DidUserBuyThisProduct(user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value.ToString());
+        bool isEmpty = !alldidUserBuyJoins.Any();
+        if (isEmpty)
+        {
+            return false;
+        }
+        else
+        {
+            foreach (var t in alldidUserBuyJoins)
+            {
+                if (t.productid == productToShow.ID)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private async Task SubmitRating()
+    {
+        if(oneStar || twoStar|| threeStar|| fourStar|| fiveStar)
+        {
+            if (String.IsNullOrEmpty(rating.comment))
+            {
+                message = String.Empty;
+                error = "You must write a comment to be able to submit!";
+            }
+            else
+            {
+                error = String.Empty;
+                message = "Rating successfully submitted!";
+                rating.productid = productToShow.ID;
+                var user = (await authenticationStateTask).User;
+                rating.name = user.FindFirst(c => c.Type == ClaimTypes.Name)?.Value.ToString();
+                rating.id = allratings.Count + 1;
+                await RatingService.AddRating(rating);
+            }
+        }
+        else
+        {
+            message = String.Empty;
+            error = "You must rate the product to be able to submit!";
+        }
+
+    }
+
 
 
 }
