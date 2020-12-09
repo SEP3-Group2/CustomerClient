@@ -456,7 +456,7 @@ input[type=file] {
 .cartTable {
     border-collapse: collapse;
     background: white;
-    border-radius: 10px;
+    border-radius: 1rem;
     overflow: hidden;
     width: 100%;
     margin: 0 auto;
