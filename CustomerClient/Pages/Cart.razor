@@ -366,114 +366,122 @@ else
 
     @if (stockCheckHidden == false)
     {
-        <button class="btn btn-outline-primary btn-block text-uppercase" @onclick="backToCart" style="margin-left: .5rem;">Back</button>
+        @if (store1NotHave.Count == 0 && store3NotHave.Count == 0 && store2NotHave.Count == 0)
+        {
+            <h2>All stores have enough stock</h2>
+        }
+        else
+        {
+            <button class="btn btn-outline-primary btn-block text-uppercase" @onclick="backToCart" style="margin-left: .5rem;">Back</button>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Store</th>
-                    <th>Quantity</th>
-                    <th>Product Title</th>
-                    <th>Category</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (store1NotHave.Count != 0)
-                {
-                    <tr class="rowsToColor">
-                        <td>Horsens only has:</td>
-                        <td>
-                            @foreach (var hasOne in store1NotHave)
-                            {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Store</th>
+                        <th>Quantity</th>
+                        <th>Product Title</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (store1NotHave.Count != 0)
+                    {
                         <tr class="rowsToColor">
-                            <td>@hasOne.Quantity</td>
-                        </tr>
-                    }
-                            </td>
-                        <td>
-                            @foreach (var hasOne in store1NotHave)
-                            {
+                            <td>Horsens only has:</td>
+                            <td>
+                                @foreach (var hasOne in store1NotHave)
+                                {
                             <tr class="rowsToColor">
-                                <td>@hasOne.Title</td>
+                                <td>@hasOne.Quantity</td>
                             </tr>
                         }
-                            </td>
+                                </td>
                             <td>
                                 @foreach (var hasOne in store1NotHave)
                                 {
                                 <tr class="rowsToColor">
-                                    <td>@hasOne.Category</td>
+                                    <td>@hasOne.Title</td>
                                 </tr>
                             }
                                 </td>
-                                </tr>
-                            }
+                                <td>
+                                    @foreach (var hasOne in store1NotHave)
+                                    {
+                                    <tr class="rowsToColor">
+                                        <td>@hasOne.Category</td>
+                                    </tr>
+                                }
+                                    </td>
+                                    </tr>
+                                }
 
-                @if (store2NotHave.Count != 0)
-                {
-                    <tr class="rowsToColor">
-                        <td>Aalborg only has:</td>
-                        <td>
-                            @foreach (var has2 in store2NotHave)
-                            {
+                    @if (store2NotHave.Count != 0)
+                    {
                         <tr class="rowsToColor">
-                            <td>@has2.Quantity</td>
-                        </tr>
-                    }
-                            </td>
+                            <td>Aalborg only has:</td>
                             <td>
                                 @foreach (var has2 in store2NotHave)
                                 {
-                                <tr class="rowsToColor">
-                                    <td>@has2.Title</td>
-                                </tr>
-                            }
+                            <tr class="rowsToColor">
+                                <td>@has2.Quantity</td>
+                            </tr>
+                        }
                                 </td>
                                 <td>
                                     @foreach (var has2 in store2NotHave)
                                     {
                                     <tr class="rowsToColor">
-                                        <td>@has2.Category</td>
+                                        <td>@has2.Title</td>
                                     </tr>
                                 }
                                     </td>
-                                    </tr>
-                                }
+                                    <td>
+                                        @foreach (var has2 in store2NotHave)
+                                        {
+                                        <tr class="rowsToColor">
+                                            <td>@has2.Category</td>
+                                        </tr>
+                                    }
+                                        </td>
+                                        </tr>
+                                    }
 
-                @if (store3NotHave.Count != 0)
-                {
-                    <tr class="rowsToColor">
-                        <td>Frederiksberg only has:</td>
-                        <td>
-                            @foreach (var has3 in store3NotHave)
-                            {
+                    @if (store3NotHave.Count != 0)
+                    {
                         <tr class="rowsToColor">
-                            <td>@has3.Quantity</td>
-                        </tr>
-                    }
-                            </td>
+                            <td>Frederiksberg only has:</td>
                             <td>
                                 @foreach (var has3 in store3NotHave)
                                 {
-                                <tr class="rowsToColor">
-                                    <td>@has3.Title</td>
-                                </tr>
-                            }
+                            <tr class="rowsToColor">
+                                <td>@has3.Quantity</td>
+                            </tr>
+                        }
                                 </td>
                                 <td>
                                     @foreach (var has3 in store3NotHave)
                                     {
                                     <tr class="rowsToColor">
-                                        <td>@has3.Category</td>
+                                        <td>@has3.Title</td>
                                     </tr>
                                 }
                                     </td>
-                                    </tr>
-                                }
-                </tbody>
-            </table>
+                                    <td>
+                                        @foreach (var has3 in store3NotHave)
+                                        {
+                                        <tr class="rowsToColor">
+                                            <td>@has3.Category</td>
+                                        </tr>
+                                    }
+                                        </td>
+                                        </tr>
+                                    }
+                    </tbody>
+                </table>
+            }
 
-        }
+
+    }
 }
 
 
@@ -750,7 +758,7 @@ else
             string todayAsString = today.ToString("dd/MM/yyyy");
             newTransaction.Date = Convert.ToDateTime(todayAsString);
             newTransaction.TotalPrice = totalPrice;
-            newTransaction.DeliveryMethod = "Under preparation";
+            newTransaction.DeliveryMethod = "under preparation";
             await TransactionService.AddTransactionAsync(newTransaction);
 
             int lastTransactionid = await TransactionService.GetLastTransactiontID();
