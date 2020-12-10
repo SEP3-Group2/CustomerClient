@@ -9,100 +9,101 @@
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
 
+<div class="col-12">
+    @if (lastId == 0)
+    {
+        <h3>You dont have order history</h3>
+    }
+    else
+    {
+        <h3>OrderHistory</h3>
 
-@if (lastId == 0)
-{
-    <h3>You dont have order history</h3>
-}
-else
-{
-    <h3>OrderHistory</h3>
-
-    <table class="table cartTable">
-        <thead class="cartThead">
-            <tr>
-                <th>Transaction ID</th>
-                <th>Product Title</th>
-                <th>Category</th>
-                <th>Quantity</th>
-                <th>Total price</th>
-                <th>Store</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody class="cartTbody">
-            @foreach (var transaction in usersTransactions)
-            {
-                lastId = transaction.Id;
-                <tr class="rowsToColor">
-                    <td>@transaction.Id</td>
-
-                    <td>
-                        @foreach (var product in usersOrders)
-                        {
-                            if (lastId == product.Transactionid)
-                            {
-                        <tr>@product.Title</tr>
-                    }
-
-
-                }
-                        </td>
-
-                    <td>
-                        @foreach (var product in usersOrders)
-                        {
-                            if (lastId == product.Transactionid)
-                            {
-                            <tr>@product.Category</tr>
-                        }
-
-                    }
-                        </td>
+        <table class="table cartTable">
+            <thead class="cartThead">
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Product Title</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Total price</th>
+                    <th>Store</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody class="cartTbody">
+                @foreach (var transaction in usersTransactions)
+                {
+                    lastId = transaction.Id;
+                    <tr class="rowsToColor">
+                        <td>@transaction.Id</td>
 
                         <td>
                             @foreach (var product in usersOrders)
                             {
                                 if (lastId == product.Transactionid)
                                 {
-                                <tr>@product.Quantity</tr>
+                            <tr>@product.Title</tr>
+                        }
+
+
+                    }
+                            </td>
+
+                        <td>
+                            @foreach (var product in usersOrders)
+                            {
+                                if (lastId == product.Transactionid)
+                                {
+                                <tr>@product.Category</tr>
                             }
 
                         }
                             </td>
 
                             <td>
-                                @transaction.TotalPrice DKK
-                            </td>
-                            @if (transaction.StoreId == 1)
-                            {
-                                <td>
-                                    Horsens
-                                </td>
+                                @foreach (var product in usersOrders)
+                                {
+                                    if (lastId == product.Transactionid)
+                                    {
+                                    <tr>@product.Quantity</tr>
+                                }
+
                             }
-                            @if (transaction.StoreId == 2)
-                            {
-                                <td>
-                                    Aalborg
                                 </td>
-                            }
-                            @if (transaction.StoreId == 3)
-                            {
+
                                 <td>
-                                    Frederiksberg
+                                    @transaction.TotalPrice DKK
                                 </td>
-                            }
+                                @if (transaction.StoreId == 1)
+                                {
+                                    <td>
+                                        Horsens
+                                    </td>
+                                }
+                                @if (transaction.StoreId == 2)
+                                {
+                                    <td>
+                                        Aalborg
+                                    </td>
+                                }
+                                @if (transaction.StoreId == 3)
+                                {
+                                    <td>
+                                        Frederiksberg
+                                    </td>
+                                }
 
 
-                            <td>
-                                @transaction.DeliveryMethod
-                            </td>
+                                <td>
+                                    @transaction.DeliveryMethod
+                                </td>
 
-                            </tr>
-                        }
-            </tbody>
-        </table>
-    }
+                                </tr>
+                            }
+                </tbody>
+            </table>
+        }
+</div>
 @code {
     List<Transaction> usersTransactions = new List<Transaction>();
     List<HistoryProduct> usersOrders = new List<HistoryProduct>();
