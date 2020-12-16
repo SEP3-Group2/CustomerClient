@@ -79,7 +79,7 @@
 
         @if (orderHidden == false)
         {
-            <EditForm Context="asd" Model="@newTransaction" OnValidSubmit="@CreateTransaction">
+            <EditForm Context="createDelivery" Model="@newTransaction" OnValidSubmit="@CreateTransaction">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <AuthorizeView>
