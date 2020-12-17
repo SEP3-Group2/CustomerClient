@@ -746,7 +746,7 @@
         {
             newTransaction.StoreId = storeIdDeliver;
             DateTime today = DateTime.Today;
-            string todayAsString = today.ToString("dd/MM/yyyy");
+            string todayAsString = today.ToString("MM/dd/yyyy");
             newTransaction.Date = Convert.ToDateTime(todayAsString);
             newTransaction.TotalPrice = totalPrice;
             newTransaction.DeliveryMethod = "Delivered";
